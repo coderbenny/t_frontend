@@ -9,27 +9,42 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleLinkClick = () => {
+    // Close the menu when a link is clicked
+    setIsOpen(false);
+  };
+
   return (
     <header className="bg-base-100 shadow-md">
       <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-bold text-blue-700">
           <Link href="/">TicketPal</Link>
         </div>
         <div className="hidden md:flex space-x-4">
           <Link href="/">
-            <button className="btn btn-ghost">Home</button>
+            <button className="btn btn-ghost" onClick={handleLinkClick}>
+              Home
+            </button>
           </Link>
           <Link href="/add-user">
-            <button className="btn btn-ghost">Add User</button>
+            <button className="btn btn-ghost" onClick={handleLinkClick}>
+              Add User
+            </button>
           </Link>
           <Link href="/create-event">
-            <button className="btn btn-ghost">Create Event</button>
+            <button className="btn btn-ghost" onClick={handleLinkClick}>
+              Create Event
+            </button>
           </Link>
           <Link href="/sell-ticket">
-            <button className="btn btn-ghost">Sell Ticket</button>
+            <button className="btn btn-ghost" onClick={handleLinkClick}>
+              Sell Ticket
+            </button>
           </Link>
           <Link href="/check-in">
-            <button className="btn btn-ghost">Check In Ticket</button>
+            <button className="btn btn-ghost" onClick={handleLinkClick}>
+              Check In Ticket
+            </button>
           </Link>
         </div>
         <div className="md:hidden">
@@ -54,29 +69,44 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-base-200 p-4">
+        <div className="absolute top-16 left-0 w-full bg-base-200 p-4 md:hidden z-50">
           <Link href="/">
-            <button className="btn btn-ghost block w-full text-left">
+            <button
+              className="btn btn-ghost block w-full text-left"
+              onClick={handleLinkClick}
+            >
               Home
             </button>
           </Link>
           <Link href="/add-user">
-            <button className="btn btn-ghost block w-full text-left">
+            <button
+              className="btn btn-ghost block w-full text-left"
+              onClick={handleLinkClick}
+            >
               Add User
             </button>
           </Link>
           <Link href="/create-event">
-            <button className="btn btn-ghost block w-full text-left">
+            <button
+              className="btn btn-ghost block w-full text-left"
+              onClick={handleLinkClick}
+            >
               Create Event
             </button>
           </Link>
           <Link href="/sell-ticket">
-            <button className="btn btn-ghost block w-full text-left">
+            <button
+              className="btn btn-ghost block w-full text-left"
+              onClick={handleLinkClick}
+            >
               Sell Ticket
             </button>
           </Link>
           <Link href="/check-in">
-            <button className="btn btn-ghost block w-full text-left">
+            <button
+              className="btn btn-ghost block w-full text-left"
+              onClick={handleLinkClick}
+            >
               Check In Ticket
             </button>
           </Link>

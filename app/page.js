@@ -6,12 +6,11 @@ import React from "react";
 const HomePage = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-grow flex flex-col items-center justify-center bg-base-200 p-6 text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4">
           Welcome to TicketPal Dashboard
         </h1>
-        <p className="text-lg md:text-xl text-gray-300 mb-6">
+        <p className="text-lg md:text-xl text-gray-400 mb-6">
           Manage users, create events, and sell tickets.
         </p>
         <div className="flex flex-col md:flex-row justify-center gap-4">
