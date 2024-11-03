@@ -1,3 +1,4 @@
+// pages/index.js
 "use client";
 import { useState } from "react";
 import Link from "next/link";
@@ -5,55 +6,47 @@ import Link from "next/link";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const handleLinkClick = () => setIsOpen(false);
 
-  const handleLinkClick = () => {
-    // Close the menu when a link is clicked
-    setIsOpen(false);
-  };
+  const menuItems = [
+    { route: "/", name: "Home" },
+    { route: "/dashboard", name: "Dashboard" },
+    { route: "/create-event", name: "Create Event" },
+    { route: "/sell-ticket", name: "Sell Ticket" },
+    { route: "/check-in-ticket", name: "Check In Ticket" },
+  ];
 
   return (
-    <header className="bg-base-100 shadow-md">
+    <header className="shadow-md fixed w-full z-50 bg-orange-50">
       <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="text-2xl font-bold text-blue-700">
-          <Link href="/">TicketPal</Link>
+        {/* Logo */}
+        <div className="text-2xl font-bold text-orange-600">
+          <Link href="/" className="hover:text-orange-400 transition-colors">
+            TicketPal
+          </Link>
         </div>
+
+        {/* Desktop Menu */}
         <div className="hidden md:flex space-x-4">
-          <Link href="/">
-            <button className="btn btn-ghost" onClick={handleLinkClick}>
-              Home
-            </button>
-          </Link>
-          <Link href="/add-user">
-            <button className="btn btn-ghost" onClick={handleLinkClick}>
-              Add User
-            </button>
-          </Link>
-          <Link href="/create-event">
-            <button className="btn btn-ghost" onClick={handleLinkClick}>
-              Create Event
-            </button>
-          </Link>
-          <Link href="/sell-ticket">
-            <button className="btn btn-ghost" onClick={handleLinkClick}>
-              Sell Ticket
-            </button>
-          </Link>
-          <Link href="/check-in">
-            <button className="btn btn-ghost" onClick={handleLinkClick}>
-              Check In Ticket
-            </button>
-          </Link>
-          <Link href="/events">
-            <button className="btn btn-ghost" onClick={handleLinkClick}>
-              Events
-            </button>
-          </Link>
+          {menuItems.map((item, index) => (
+            <Link key={index} href={item.route}>
+              <button
+                className="btn btn-ghost hover:bg-orange-200 rounded-md text-gray-700 transition ease-in-out duration-150"
+                onClick={handleLinkClick}
+              >
+                {item.name}
+              </button>
+            </Link>
+          ))}
         </div>
+
+        {/* Mobile Menu Toggle */}
         <div className="md:hidden">
-          <button onClick={toggleMenu} className="btn btn-ghost">
+          <button
+            onClick={toggleMenu}
+            className="btn btn-ghost hover:bg-orange-200 p-2 rounded-md text-orange-600 transition ease-in-out duration-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -74,55 +67,17 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-base-200 p-4 md:hidden z-50">
-          <Link href="/">
-            <button
-              className="btn btn-ghost block w-full text-left"
-              onClick={handleLinkClick}
-            >
-              Home
-            </button>
-          </Link>
-          <Link href="/add-user">
-            <button
-              className="btn btn-ghost block w-full text-left"
-              onClick={handleLinkClick}
-            >
-              Add User
-            </button>
-          </Link>
-          <Link href="/create-event">
-            <button
-              className="btn btn-ghost block w-full text-left"
-              onClick={handleLinkClick}
-            >
-              Create Event
-            </button>
-          </Link>
-          <Link href="/sell-ticket">
-            <button
-              className="btn btn-ghost block w-full text-left"
-              onClick={handleLinkClick}
-            >
-              Sell Ticket
-            </button>
-          </Link>
-          <Link href="/check-in">
-            <button
-              className="btn btn-ghost block w-full text-left"
-              onClick={handleLinkClick}
-            >
-              Check In Ticket
-            </button>
-          </Link>
-          <Link href="/events">
-            <button
-              className="btn btn-ghost block w-full text-left"
-              onClick={handleLinkClick}
-            >
-              Events
-            </button>
-          </Link>
+        <div className="absolute top-16 left-0 w-full bg-white shadow-lg p-4 md:hidden">
+          {menuItems.map((item, index) => (
+            <Link key={index} href={item.route}>
+              <button
+                className="btn btn-ghost block w-full text-left text-gray-700 hover:bg-orange-100 hover:text-orange-600 rounded-md py-2 transition ease-in-out duration-150"
+                onClick={handleLinkClick}
+              >
+                {item.name}
+              </button>
+            </Link>
+          ))}
         </div>
       )}
     </header>

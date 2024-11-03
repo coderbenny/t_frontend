@@ -1,3 +1,4 @@
+// pages/login.js
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -31,17 +32,22 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-base-200 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-orange-100 to-orange-200 p-4">
       <form
-        className="w-full max-w-md bg-base-100 p-8 rounded-lg shadow-md"
+        className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg"
         onSubmit={handleLogin}
       >
-        <h2 className="text-2xl font-bold text-center mb-6 tracking-wide">
+        <h2 className="text-3xl font-bold text-center mb-6 text-orange-600 tracking-wider">
           Login
         </h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-center mb-4 font-medium">{error}</p>
+        )}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 mb-2">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 mb-2 font-semibold"
+          >
             Email
           </label>
           <input
@@ -49,12 +55,15 @@ const LoginPage = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="input input-bordered w-full text-gray-400"
+            className="input input-bordered w-full text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
             required
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-700 mb-2">
+        <div className="mb-6">
+          <label
+            htmlFor="password"
+            className="block text-gray-700 mb-2 font-semibold"
+          >
             Password
           </label>
           <input
@@ -62,17 +71,22 @@ const LoginPage = () => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="input input-bordered w-full text-gray-400"
+            className="input input-bordered w-full text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary w-full mt-4">
+        <button
+          type="submit"
+          className="btn w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-md transition duration-150 ease-in-out transform hover:scale-105 active:scale-95 shadow-md"
+        >
           Login
         </button>
-        <p className="text-center mt-4">
-          Don't have an account?{" "}
-          <Link href="/registration" className="text-primary font-semibold">
-            Register
+        <p className="text-center mt-6 text-gray-700">
+          Don’t have an account?{" "}
+          <Link href="/registration">
+            <span className="text-orange-500 hover:text-orange-600 font-semibold cursor-pointer transition-colors duration-150">
+              Register
+            </span>
           </Link>
         </p>
       </form>
