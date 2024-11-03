@@ -46,6 +46,11 @@ const Header = () => {
               Check In Ticket
             </button>
           </Link>
+          <Link href="/events">
+            <button className="btn btn-ghost" onClick={handleLinkClick}>
+              Events
+            </button>
+          </Link>
         </div>
         <div className="md:hidden">
           <button onClick={toggleMenu} className="btn btn-ghost">
@@ -108,6 +113,14 @@ const Header = () => {
               onClick={handleLinkClick}
             >
               Check In Ticket
+            </button>
+          </Link>
+          <Link href="/events">
+            <button
+              className="btn btn-ghost block w-full text-left"
+              onClick={handleLinkClick}
+            >
+              Events
             </button>
           </Link>
         </div>

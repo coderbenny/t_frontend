@@ -5,28 +5,46 @@ import Link from "next/link";
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     // Basic validation
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !phone) {
       setError("All fields are required.");
       return;
     }
 
-    // Simulate a registration process (replace with actual API call)
-    console.log("Registering user:", { name, email, password });
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin-registration`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({ name, email, phone, password }),
+        }
+      );
 
-    // Simulate successful registration
-    setSuccessMessage("User registered successfully!");
-    setError("");
-    setName("");
-    setEmail("");
-    setPassword("");
+      if (res.ok) {
+        setSuccessMessage("User registered successfully!");
+        setError("");
+        // Clear form fields after successful registration
+        setName("");
+        setPhone("");
+        setEmail("");
+        setPassword("");
+      } else {
+        setError("Registration was not successful!");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -66,6 +84,20 @@ const RegisterPage = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="input input-bordered w-full text-gray-400"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="phone" className="block text-gray-700 mb-2">
+            Phone
+          </label>
+          <input
+            type="text"
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             className="input input-bordered w-full text-gray-400"
             required
           />
