@@ -6,27 +6,20 @@ const SellTicket = () => {
   const [eventId, setEventId] = useState("");
   const [discountCode, setDiscountCode] = useState("");
   const [newUser, setNewUser] = useState({ name: "", email: "", phone: "" });
-  const [users, setUsers] = useState([
-    { id: 1, name: "John", email: "john@mail.com", phone: "3473843784" },
-    { id: 2, name: "Sam", email: "sam@mail.com", phone: "0903484848" },
-    { id: 3, name: "Jane", email: "jane@mail.com", phone: "-234759494" },
-  ]);
-  const [events, setEvents] = useState([
-    // { id: 1, name: "Rahafest" },
-    // { id: 2, name: "Msa Event" },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [events, setEvents] = useState([]);
 
   // Fetch users and events from the API on component mount
   useEffect(() => {
-    //   const fetchUsers = async () => {
-    //     try {
-    //       const res = await fetch("http://127.0.0.1:5555/users");
-    //       const data = await res.json();
-    //       setUsers(data);
-    //     } catch (error) {
-    //       console.error("Error fetching users:", error);
-    //     }
-    //   };
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:5555/users");
+        const data = await res.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
 
     const fetchEvents = async () => {
       try {
@@ -38,7 +31,7 @@ const SellTicket = () => {
       }
     };
 
-    //   fetchUsers();
+    fetchUsers();
     fetchEvents();
   }, []);
 
@@ -59,22 +52,26 @@ const SellTicket = () => {
 
     if (res.ok) {
       alert("Ticket sold successfully!");
-      setUserId("");
-      setEventId("");
-      setDiscountCode("");
-      setNewUser({ name: "", email: "", phone: "" });
+      resetForm();
     } else {
       alert("Failed to sell ticket");
     }
+  };
+
+  const resetForm = () => {
+    setUserId("");
+    setEventId("");
+    setDiscountCode("");
+    setNewUser({ name: "", email: "", phone: "" });
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-base-200">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg space-y-4"
+        className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg space-y-6"
       >
-        <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
+        <h1 className="text-3xl font-bold text-center text-orange-600">
           Sell Ticket
         </h1>
 
@@ -87,7 +84,7 @@ const SellTicket = () => {
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
             required
-            className="select select-bordered w-full"
+            className="select select-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
           >
             <option value="" disabled>
               Select a user
@@ -116,7 +113,7 @@ const SellTicket = () => {
                   setNewUser((prev) => ({ ...prev, name: e.target.value }))
                 }
                 required
-                className="input input-bordered w-full"
+                className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
               />
             </div>
 
@@ -132,7 +129,7 @@ const SellTicket = () => {
                   setNewUser((prev) => ({ ...prev, email: e.target.value }))
                 }
                 required
-                className="input input-bordered w-full"
+                className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
               />
             </div>
 
@@ -148,7 +145,7 @@ const SellTicket = () => {
                   setNewUser((prev) => ({ ...prev, phone: e.target.value }))
                 }
                 required
-                className="input input-bordered w-full"
+                className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
               />
             </div>
           </div>
@@ -163,7 +160,7 @@ const SellTicket = () => {
             value={eventId}
             onChange={(e) => setEventId(e.target.value)}
             required
-            className="select select-bordered w-full"
+            className="select select-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
           >
             <option value="" disabled>
               Select an event
@@ -186,11 +183,14 @@ const SellTicket = () => {
             placeholder="Enter discount code"
             value={discountCode}
             onChange={(e) => setDiscountCode(e.target.value)}
-            className="input input-bordered w-full"
+            className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
           />
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">
+        <button
+          type="submit"
+          className="btn btn-primary w-full bg-orange-600 hover:bg-orange-500 transition duration-200 text-white"
+        >
           Sell Ticket
         </button>
       </form>

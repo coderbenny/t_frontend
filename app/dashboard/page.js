@@ -4,12 +4,17 @@ import React, { useState } from "react";
 const Dashboard = () => {
   // Sample events data
   const events = [
-    { id: 1, name: "Concert", date: "2024-11-15", location: "City Arena" },
+    {
+      id: 1,
+      name: "Concert",
+      date: "2024-11-15",
+      location: "Nairobi University",
+    },
     {
       id: 2,
       name: "Tech Conference",
       date: "2024-12-01",
-      location: "Expo Center",
+      location: "KCA University",
     },
   ];
 
@@ -46,7 +51,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-6 md:p-10 min-h-screen bg-base-200 flex flex-col items-center">
+    <div className="p-6 md:p-10 min-h-screen bg-gradient-to-br from-orange-50 via-orange-100 to-white flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-4 mt-16 text-center text-orange-600">
         Dashboard
       </h1>
@@ -56,7 +61,7 @@ const Dashboard = () => {
           Available Events
         </h2>
         <div className="overflow-x-auto">
-          <table className="table w-full bg-white shadow-lg rounded-lg">
+          <table className="table w-full bg-white text-black shadow-lg rounded-lg">
             <thead>
               <tr className="bg-orange-600 text-white">
                 <th className="p-4">Event Name</th>
