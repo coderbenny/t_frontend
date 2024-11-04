@@ -9,30 +9,19 @@ const SellTicket = () => {
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
 
-  // Fetch users and events from the API on component mount
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async (endpoint, setData) => {
       try {
-        const res = await fetch("http://127.0.0.1:5555/users");
+        const res = await fetch(`http://127.0.0.1:5555/${endpoint}`);
         const data = await res.json();
-        setUsers(data);
+        setData(data);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error(`Error fetching ${endpoint}:`, error);
       }
     };
 
-    const fetchEvents = async () => {
-      try {
-        const res = await fetch("http://127.0.0.1:5555/events");
-        const data = await res.json();
-        setEvents(data);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-
-    fetchUsers();
-    fetchEvents();
+    fetchData("users", setUsers);
+    fetchData("events", setEvents);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -42,19 +31,22 @@ const SellTicket = () => {
         ? { ...newUser, eventId, discountCode }
         : { userId, eventId, discountCode };
 
-    const res = await fetch("http://127.0.0.1:5555/sell", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch("http://127.0.0.1:5555/sell", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (res.ok) {
-      alert("Ticket sold successfully!");
-      resetForm();
-    } else {
-      alert("Failed to sell ticket");
+      if (res.ok) {
+        alert("Ticket sold successfully!");
+        resetForm();
+      } else {
+        alert("Failed to sell ticket");
+      }
+    } catch (error) {
+      console.error("Error selling ticket:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 
@@ -63,6 +55,10 @@ const SellTicket = () => {
     setEventId("");
     setDiscountCode("");
     setNewUser({ name: "", email: "", phone: "" });
+  };
+
+  const handleNewUserChange = (field) => (e) => {
+    setNewUser((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
   return (
@@ -75,7 +71,6 @@ const SellTicket = () => {
           Sell Ticket
         </h1>
 
-        {/* Select User */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Select User</span>
@@ -90,7 +85,7 @@ const SellTicket = () => {
               Select a user
             </option>
             {users.map((user) => (
-              <option key={user.id} value={user.phone}>
+              <option key={user.id} value={user.id}>
                 {user.name} - {user.email}
               </option>
             ))}
@@ -98,60 +93,28 @@ const SellTicket = () => {
           </select>
         </div>
 
-        {/* New User Fields */}
         {userId === "new" && (
           <div className="space-y-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Name</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Enter name"
-                value={newUser.name}
-                onChange={(e) =>
-                  setNewUser((prev) => ({ ...prev, name: e.target.value }))
-                }
-                required
-                className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
-              <input
-                type="email"
-                placeholder="Enter email"
-                value={newUser.email}
-                onChange={(e) =>
-                  setNewUser((prev) => ({ ...prev, email: e.target.value }))
-                }
-                required
-                className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Phone Number</span>
-              </label>
-              <input
-                type="tel"
-                placeholder="Enter phone number"
-                value={newUser.phone}
-                onChange={(e) =>
-                  setNewUser((prev) => ({ ...prev, phone: e.target.value }))
-                }
-                required
-                className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
-              />
-            </div>
+            {["name", "email", "phone"].map((field) => (
+              <div key={field} className="form-control">
+                <label className="label">
+                  <span className="label-text">
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </span>
+                </label>
+                <input
+                  type={field === "email" ? "email" : "text"}
+                  placeholder={`Enter ${field}`}
+                  value={newUser[field]}
+                  onChange={handleNewUserChange(field)}
+                  required
+                  className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
+                />
+              </div>
+            ))}
           </div>
         )}
 
-        {/* Select Event */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Select Event</span>
@@ -173,7 +136,6 @@ const SellTicket = () => {
           </select>
         </div>
 
-        {/* Discount Code */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Discount Code (Optional)</span>
