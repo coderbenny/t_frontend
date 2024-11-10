@@ -62,7 +62,7 @@ const SellTicket = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-base-200">
+    <div className="animated-bg flex flex-col  items-center justify-center min-h-screen p-4 bg-base-200">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg space-y-6"

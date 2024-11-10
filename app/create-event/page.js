@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 
 const CreateEvent = () => {
@@ -6,31 +7,52 @@ const CreateEvent = () => {
   const [eventDate, setEventDate] = useState("");
   const [description, setDescription] = useState("");
   const [capacity, setCapacity] = useState("");
+  const [price, setPrice] = useState("");
+  const [imageLink, setImageLink] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/events", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ eventName, eventDate, description, capacity }),
-    });
 
-    if (res.ok) {
-      alert("Event created successfully!");
-      // Clear input fields after submission
-      setEventName("");
-      setEventDate("");
-      setDescription("");
-      setCapacity("");
-    } else {
-      alert("Failed to create event");
+    const eventData = {
+      eventName,
+      eventDate,
+      description,
+      capacity,
+      price,
+      image_link: imageLink,
+    };
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventData),
+      });
+
+      if (res.ok) {
+        alert("Event created successfully!");
+        // Clear input fields after successful submission
+        setEventName("");
+        setEventDate("");
+        setDescription("");
+        setCapacity("");
+        setPrice("");
+        setImageLink("");
+      } else {
+        const errorData = await res.json();
+        alert(
+          `Failed to create event: ${errorData.message || "Unknown error"}`
+        );
+      }
+    } catch (error) {
+      alert(`Error: ${error.message}`);
     }
   };
 
   return (
-    <div className="flex flex-col bg-gradient-to-br from-orange-50 via-orange-100 to-white items-center justify-center min-h-screen p-4 bg-base-200">
+    <div className="flex flex-col bg-gradient-to-br from-orange-50 via-orange-100 to-white items-center justify-center min-h-screen p-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-lg mt-20 bg-white p-8 rounded-lg shadow-lg space-y-6"
@@ -39,6 +61,7 @@ const CreateEvent = () => {
           Create Event
         </h1>
 
+        {/* Event Name */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Event Name</span>
@@ -53,6 +76,7 @@ const CreateEvent = () => {
           />
         </div>
 
+        {/* Event Date */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Event Date</span>
@@ -66,6 +90,7 @@ const CreateEvent = () => {
           />
         </div>
 
+        {/* Description */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Description</span>
@@ -80,6 +105,7 @@ const CreateEvent = () => {
           />
         </div>
 
+        {/* Capacity */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Capacity</span>
@@ -94,6 +120,37 @@ const CreateEvent = () => {
           />
         </div>
 
+        {/* Price */}
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Price</span>
+          </label>
+          <input
+            type="number"
+            placeholder="Enter event price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+            className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
+          />
+        </div>
+
+        {/* Image Link */}
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Image Link</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Enter image URL"
+            value={imageLink}
+            onChange={(e) => setImageLink(e.target.value)}
+            required
+            className="input input-bordered w-full focus:outline-none focus:ring focus:ring-orange-300"
+          />
+        </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
           className="btn btn-primary w-full bg-orange-600 hover:bg-orange-500 transition duration-200 text-white"

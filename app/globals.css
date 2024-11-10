@@ -19,3 +19,21 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes pulseAnimation {
+  0% {
+    background: linear-gradient(to bottom right, #fff7ed, #ffedd5, #ffffff);
+  }
+  50% {
+    background: linear-gradient(to bottom right, #ffedd5, #ffffff, #fff7ed);
+  }
+  100% {
+    background: linear-gradient(to bottom right, #fff7ed, #ffedd5, #ffffff);
+  }
+}
+
+.animated-bg {
+  animation: pulseAnimation 8s ease-in-out infinite;
+  height: 100vh; /* Full screen */
+  width: 100%;
+}

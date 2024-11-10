@@ -5,7 +5,7 @@ import React from "react";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-orange-50 via-orange-100 to-white">
+    <div className="min-h-screen flex flex-col animated-bg">
       <main className="flex-grow flex flex-col items-center justify-center p-6 text-center space-y-6">
         <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-700 bg-clip-text text-transparent mb-4">
           Welcome to TicketPal Dashboard

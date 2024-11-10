@@ -55,7 +55,7 @@ const LoginPage = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="input input-bordered w-full text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
+            className="input input-bordered w-full text-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
             required
           />
         </div>
@@ -71,7 +71,7 @@ const LoginPage = () => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="input input-bordered w-full text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
+            className="input input-bordered w-full text-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
             required
           />
         </div>
