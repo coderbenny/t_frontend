@@ -1,54 +1,65 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 
 const Dashboard = () => {
-  // Sample events data
-  const events = [
-    {
-      id: 1,
-      name: "Concert",
-      date: "2024-11-15",
-      location: "Nairobi University",
-    },
-    {
-      id: 2,
-      name: "Tech Conference",
-      date: "2024-12-01",
-      location: "KCA University",
-    },
-  ];
+  const [events, setEvents] = useState([]);
+  const [bookedTickets, setBookedTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Sample booked tickets data with "used" status
-  const [bookedTickets, setBookedTickets] = useState([
-    {
-      id: 101,
-      eventName: "Concert",
-      holderName: "Alice",
-      date: "2024-11-15",
-      used: false,
-    },
-    {
-      id: 102,
-      eventName: "Tech Conference",
-      holderName: "Bob",
-      date: "2024-12-01",
-      used: true,
-    },
-  ]);
+  const fetchData = async (endpoint, setData) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/${endpoint}`
+      );
+      if (!res.ok) throw new Error(`Failed to fetch ${endpoint}`);
+      const data = await res.json();
+      setData(data);
+    } catch (err) {
+      setError(`Error fetching ${endpoint}: ${err.message}`);
+    }
+  };
 
-  // Handler to mark ticket as used
+  useEffect(() => {
+    const fetchAllData = async () => {
+      setLoading(true);
+      await Promise.all([
+        fetchData("tickets", setBookedTickets),
+        fetchData("events", setEvents),
+      ]);
+      setLoading(false);
+    };
+    fetchAllData();
+  }, []);
+
   const markAsUsed = (ticketId) => {
-    setBookedTickets((prevTickets) =>
-      prevTickets.map((ticket) =>
+    setBookedTickets((prev) =>
+      prev.map((ticket) =>
         ticket.id === ticketId ? { ...ticket, used: true } : ticket
       )
     );
   };
 
-  // Placeholder for viewing ticket details
   const viewTicketDetails = (ticket) => {
     alert(`Viewing details for ticket ID: ${ticket.id}`);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 md:p-10 min-h-screen bg-gradient-to-br from-orange-50 via-orange-100 to-white flex flex-col items-center">
@@ -56,6 +67,7 @@ const Dashboard = () => {
         Dashboard
       </h1>
 
+      {/* Available Events */}
       <section className="mb-10 w-full">
         <h2 className="text-3xl font-semibold mb-4 text-orange-600 text-center">
           Available Events
@@ -65,23 +77,38 @@ const Dashboard = () => {
             <thead>
               <tr className="bg-orange-600 text-white">
                 <th className="p-4">Event Name</th>
-                <th className="p-4">Date</th>
-                <th className="p-4">Location</th>
+                <th className="p-4">Price (KES)</th>
+                <th className="p-4">Capacity</th>
                 <th className="p-4">Actions</th>
               </tr>
             </thead>
             <tbody>
               {events.map((event) => (
-                <tr key={event.id} className="hover:bg-gray-100">
-                  <td className="p-4 font-semibold">{event.name}</td>
-                  <td className="p-4">{event.date}</td>
-                  <td className="p-4">{event.location}</td>
+                <tr
+                  key={event.id}
+                  className={`hover:bg-gray-100 ${
+                    event.capacity === 0 ? "bg-red-100" : ""
+                  }`}
+                >
+                  <td className="p-4 font-semibold">{event.title}</td>
+                  <td className="p-4">{event.price}</td>
+                  <td
+                    className={`p-4 ${
+                      event.capacity === 0 ? "text-red-600 font-bold" : ""
+                    }`}
+                  >
+                    {event.capacity === 0 ? "Sold Out" : event.capacity}
+                  </td>
                   <td className="p-4">
                     <button
-                      className="btn btn-primary hover:bg-orange-400"
-                      onClick={() => alert(`Registering for ${event.name}`)}
+                      disabled={event.capacity === 0}
+                      className={`btn ${
+                        event.capacity === 0
+                          ? "btn-disabled"
+                          : "btn-primary hover:bg-orange-400"
+                      }`}
                     >
-                      Close
+                      {event.capacity === 0 ? "Closed" : "Close"}
                     </button>
                   </td>
                 </tr>
@@ -91,6 +118,7 @@ const Dashboard = () => {
         </div>
       </section>
 
+      {/* Booked Tickets */}
       <section>
         <h2 className="text-3xl font-semibold mb-4 text-orange-600 text-center">
           Booked Tickets
@@ -103,17 +131,19 @@ const Dashboard = () => {
             >
               <div className="card-body p-6 flex flex-col justify-between h-full">
                 <h3 className="text-xl font-semibold text-gray-800 text-center">
-                  {ticket.eventName}
+                  {ticket.event.title}
                 </h3>
                 <p className="text-gray-600 text-center">
-                  Holder: {ticket.holderName}
+                  Holder: {ticket.user.name}
                 </p>
-                <p className="text-gray-600 text-center">Date: {ticket.date}</p>
+                <p className="text-gray-600 text-center">
+                  Contact: {ticket.user.phone}
+                </p>
                 <div className="flex justify-center items-center mt-4">
                   <span
                     className={`badge ${
                       ticket.used ? "badge-success text-white" : "badge-warning"
-                    } mr-2 h-full`}
+                    } mr-2`}
                   >
                     {ticket.used ? "Used" : "Unused"}
                   </span>
