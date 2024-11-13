@@ -33,6 +33,11 @@ const Dashboard = () => {
     fetchAllData();
   }, []);
 
+  // Function for closing an event
+  function handleCloseEvent(eventId) {
+    alert(`Event closed event no.${eventId} succesfully!`);
+  }
+
   const markAsUsed = (ticketId) => {
     setBookedTickets((prev) =>
       prev.map((ticket) =>
@@ -76,10 +81,11 @@ const Dashboard = () => {
           <table className="table w-full bg-white text-black shadow-lg rounded-lg">
             <thead>
               <tr className="bg-orange-600 text-white">
-                <th className="p-4">Event Name</th>
-                <th className="p-4">Price (KES)</th>
-                <th className="p-4">Capacity</th>
-                <th className="p-4">Actions</th>
+                <th className="p-4 font-bold">Event Name</th>
+                <th className="p-4 font-bold">Price (KES)</th>
+                <th className="p-4 font-bold">Capacity</th>
+                <th className="p-4 font-bold">Actions</th>
+                <th className="p-4 font-bold">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -102,14 +108,20 @@ const Dashboard = () => {
                   <td className="p-4">
                     <button
                       disabled={event.capacity === 0}
+                      onClick={() => handleCloseEvent(event.id)}
                       className={`btn ${
-                        event.capacity === 0
+                        event.capacity === 0 || event.closed !== false
                           ? "btn-disabled"
                           : "btn-primary hover:bg-orange-400"
                       }`}
                     >
                       {event.capacity === 0 ? "Closed" : "Close"}
                     </button>
+                  </td>
+                  <td className="p-4">
+                    <p className="font-semibold">
+                      {event.closed === true ? "Closed" : "Active"}
+                    </p>
                   </td>
                 </tr>
               ))}
@@ -121,7 +133,7 @@ const Dashboard = () => {
       {/* Booked Tickets */}
       <section>
         <h2 className="text-3xl font-semibold mb-4 text-orange-600 text-center">
-          Booked Tickets
+          Recent Tickets
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookedTickets.map((ticket) => (

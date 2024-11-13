@@ -166,10 +166,12 @@ const SellTicket = () => {
               <option
                 key={event.id}
                 value={event.id}
-                disabled={event.capacity === 0}
+                disabled={event.capacity === 0 || event.closed === true}
               >
                 {event.title} | KES {event.price}{" "}
-                {event.capacity === 0 ? " (Sold Out)" : ""}
+                {event.capacity === 0 || event.closed === true
+                  ? " (Sold Out)"
+                  : ""}
               </option>
             ))}
           </select>
