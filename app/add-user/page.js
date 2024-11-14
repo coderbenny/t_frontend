@@ -8,7 +8,7 @@ const AddUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/users", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

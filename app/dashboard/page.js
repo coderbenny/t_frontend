@@ -34,8 +34,28 @@ const Dashboard = () => {
   }, []);
 
   // Function for closing an event
-  function handleCloseEvent(eventId) {
-    alert(`Event closed event no.${eventId} succesfully!`);
+  async function handleCloseEvent(eventId) {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (res.status === 200) {
+        const data = await res.json();
+        const new_events = events.map((event) =>
+          event.id === eventId ? "" : event
+        );
+        console.log(new_events);
+        // alert(`Event closed event no.${eventId} succesfully!`);
+      }
+    } catch (error) {
+      alert("An error occurred");
+    }
   }
 
   const markAsUsed = (ticketId) => {
@@ -91,9 +111,10 @@ const Dashboard = () => {
             <tbody>
               {events.map((event) => (
                 <tr
-                  key={event.id}
-                  className={`hover:bg-gray-100 ${
-                    event.capacity === 0 ? "bg-red-100" : ""
+                  key={event.id}                  className={`hover:bg-gray-100 ${
+                    event.capacity === 0 || event.closed === true
+                      ? "bg-red-100"
+                      : ""
                   }`}
                 >
                   <td className="p-4 font-semibold">{event.title}</td>

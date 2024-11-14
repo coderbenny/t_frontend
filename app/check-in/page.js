@@ -9,7 +9,7 @@ const CheckIn = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const res = await fetch("/api/tickets/check-in", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tickets/check-in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
