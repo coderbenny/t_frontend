@@ -84,14 +84,6 @@ const SellTicket = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        {error}
-      </div>
-    );
-  }
-
   return (
     <div className="animated-bg flex flex-col items-center justify-center min-h-screen p-4 bg-base-200">
       <form

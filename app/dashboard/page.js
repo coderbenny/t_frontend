@@ -7,23 +7,20 @@ const Dashboard = () => {
   const [bookedTickets, setBookedTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [emptyEvents, setEmptyEvents] = useState(false); // State for empty events
   const [emptyTickets, setEmptyTickets] = useState(false); // State for empty tickets
 
-  const fetchData = async (endpoint, setData, setEmpty) => {
+  const fetchData = async (endpoint, setData) => {
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/${endpoint}`
       );
       if (res.status === 404) {
-        setEmpty(true); // Mark as empty when 404
         setData([]);
         return;
       }
       if (!res.ok) throw new Error(`Failed to fetch ${endpoint}`);
       const data = await res.json();
       setData(data);
-      setEmpty(false); // Reset empty state if data exists
     } catch (err) {
       setError(`Error fetching ${endpoint}: ${err.message}`);
     }
@@ -33,8 +30,8 @@ const Dashboard = () => {
     const fetchAllData = async () => {
       setLoading(true);
       await Promise.all([
-        fetchData("tickets", setBookedTickets, setEmptyTickets),
-        fetchData("events", setEvents, setEmptyEvents),
+        fetchData("tickets", setBookedTickets),
+        fetchData("events", setEvents),
       ]);
       setLoading(false);
     };
@@ -61,6 +58,8 @@ const Dashboard = () => {
       }
     } catch (error) {
       alert("An error occurred while closing the event.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -80,14 +79,6 @@ const Dashboard = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <span className="loading loading-ring loading-lg"></span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-red-500">
-        {error}
       </div>
     );
   }
@@ -115,7 +106,7 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {emptyEvents ? (
+              {events.length === 0 ? (
                 <tr>
                   <td
                     colSpan={5}
@@ -172,7 +163,7 @@ const Dashboard = () => {
         <h2 className="text-3xl font-semibold mb-4 text-orange-600 text-center">
           Recent Tickets
         </h2>
-        {emptyTickets ? (
+        {bookedTickets.length === 0 ? (
           <div className="text-center text-gray-500 mt-10">
             <p className="text-lg">No tickets available.</p>
           </div>
