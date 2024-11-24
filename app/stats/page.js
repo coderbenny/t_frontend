@@ -27,12 +27,12 @@ const HomePage = () => {
     <div className="min-h-[100vh] flex flex-col animated-bg mb-10">
       <main className="flex-grow flex flex-col items-center py-28 justify-center p-6 text-center space-y-6">
         <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-700 bg-clip-text text-transparent mb-4">
-          Welcome to TicketPal Dashboard
+          TicketPal Stats
         </h1>
 
         <p className="text-lg md:text-xl text-gray-500 mb-6 max-w-md">
           {isLoggedIn
-            ? "Manage your events and view ticket system stats below."
+            ? "View ticket system stats below."
             : "Manage users, create events, and sell tickets with ease."}
         </p>
 
