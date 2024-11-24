@@ -15,6 +15,7 @@ const Header = () => {
     { route: "/create-event", name: "Create Event" },
     { route: "/sell-ticket", name: "Sell Ticket" },
     { route: "/check-in-ticket", name: "Check In Ticket" },
+    { route: "/clients", name: "Clients" }, // Added Clients route
   ];
 
   return (
