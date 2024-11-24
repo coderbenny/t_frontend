@@ -92,7 +92,7 @@ const Dashboard = () => {
       {/* Available Events */}
       <section className="mb-10 w-full">
         <h2 className="text-3xl font-semibold mb-4 text-orange-600 text-center">
-          Available Events
+          All Events
         </h2>
         <div className="overflow-x-auto">
           <table className="table w-full bg-white text-black shadow-lg rounded-lg">
