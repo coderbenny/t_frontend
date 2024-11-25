@@ -145,10 +145,6 @@ const TicketPurchasePage = () => {
               <p className="text-gray-400">
                 <strong>Price:</strong> Ksh.{eventDetails.price.toFixed(2)}
               </p>
-              <p className="text-gray-400">
-                <strong>Capacity:</strong>{" "}
-                {eventCapacity === 0 ? "Unlimited" : eventCapacity}
-              </p>
               <p
                 className={`text-lg font-bold ${
                   isEventClosed ? "text-red-500" : "text-green-500"
