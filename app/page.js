@@ -1,8 +1,9 @@
 "use client";
-
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Correct hook for Next.js navigation
 
 const EventsPage = () => {
+  const router = useRouter();
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,6 +47,11 @@ const EventsPage = () => {
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, events]);
+
+  // Handle navigating to the buy ticket page
+  const handleBuyTicket = (eventId) => {
+    router.push(`/tickets/${eventId}`); // Navigate to ticket page
+  };
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col py-20">
@@ -104,13 +110,13 @@ const EventsPage = () => {
                         {new Date(event.event_date).toLocaleDateString()}
                       </p>
                       <p>
-                        <span className="font-bold">Price:</span> $
+                        <span className="font-bold">Price:</span> Ksh.
                         {event.price.toFixed(2)}
                       </p>
                     </div>
                     <button
                       className="w-full mt-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      onClick={() => alert(`Buying ticket for ${event.title}`)}
+                      onClick={() => handleBuyTicket(event.id)} // Trigger navigation on button click
                     >
                       Buy Ticket
                     </button>
