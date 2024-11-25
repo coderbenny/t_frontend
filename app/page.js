@@ -56,7 +56,7 @@ const EventsPage = () => {
   return (
     <div className="min-h-[100vh] w-full flex flex-col py-20">
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-600 to-indigo-500 py-8 text-center shadow-md">
+      <header className="bg-gradient-to-r from-orange-600 to-orange-500 py-8 text-center shadow-md">
         <h1 className="text-4xl font-bold text-white">Events</h1>
         <p className="text-white mt-2">
           Discover and get tickets for amazing events happening near you.
@@ -115,7 +115,7 @@ const EventsPage = () => {
                       </p>
                     </div>
                     <button
-                      className="w-full mt-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full mt-4 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       onClick={() => handleBuyTicket(event.id)} // Trigger navigation on button click
                     >
                       Buy Ticket

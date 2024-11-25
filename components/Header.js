@@ -2,8 +2,10 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const auth = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -14,7 +16,7 @@ const Header = () => {
     { route: "/dashboard", name: "Dashboard" },
     { route: "/create-event", name: "Create Event" },
     { route: "/sell-ticket", name: "Sell Ticket" },
-    { route: "/check-in-ticket", name: "Check In Ticket" },
+    // { route: "/check-in-ticket", name: "Check In Ticket" },
     { route: "/clients", name: "Clients" }, // Added Clients route
   ];
 
