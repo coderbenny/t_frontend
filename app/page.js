@@ -11,25 +11,28 @@ const EventsPage = () => {
 
   // Fetch events from the backend
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch events.");
+    const fetchEvents = async () => {
+      setLoading(true);
+      setError(null); // Reset error state before fetching
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/events`
+        );
+        if (!res.ok) {
+          throw new Error(`Failed to fetch events: ${res.statusText}`);
         }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        setEvents(data);
-        setFilteredEvents(data); // Set filtered events to all events initially
+        const data = await res.json();
+        const openEvents = data.filter((event) => !event.closed);
+        setEvents(openEvents);
+        setFilteredEvents(openEvents);
+      } catch (err) {
+        setError(err.message);
+      } finally {
         setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchEvents();
   }, []);
 
   // Debounced search functionality
@@ -39,7 +42,7 @@ const EventsPage = () => {
         event.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredEvents(filtered);
-    }, 500);
+    }, 300); // Debounce delay reduced for better UX
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, events]);
@@ -54,7 +57,7 @@ const EventsPage = () => {
         </p>
       </header>
 
-      {/* Main content with dark background */}
+      {/* Main content */}
       <main className="flex-grow container mx-auto px-6 py-8 bg-gray-900">
         {/* Search Bar */}
         <div className="form-control w-full md:w-1/2 lg:w-1/3 mb-6 mx-auto">
@@ -68,22 +71,12 @@ const EventsPage = () => {
         </div>
 
         {/* Loading and Error Handling */}
-        {loading && (
+        {loading ? (
           <div className="flex items-center justify-center h-64">
             <div className="loading loading-spinner loading-lg text-indigo-500"></div>
           </div>
-        )}
-
-        {error && (
-          <div className="alert alert-error shadow-lg">
-            <div>
-              <span>Error: {error}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Display Events */}
-        {!loading && !error && (
+        ) : (
+          /* Display Events */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredEvents.length > 0 ? (
               filteredEvents.map((event) => (
@@ -115,7 +108,6 @@ const EventsPage = () => {
                         {event.price.toFixed(2)}
                       </p>
                     </div>
-                    {/* Buy Ticket Button */}
                     <button
                       className="w-full mt-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       onClick={() => alert(`Buying ticket for ${event.title}`)}
