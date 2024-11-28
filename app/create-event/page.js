@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import withAuth from "@/components/WithAuth";
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState("");
@@ -19,7 +20,7 @@ const CreateEvent = () => {
       description,
       capacity,
       price,
-      image: imageLink,
+      image_link: imageLink,
     };
 
     try {
@@ -162,4 +163,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default withAuth(CreateEvent);

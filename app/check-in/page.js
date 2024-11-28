@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import withAuth from "@/components/WithAuth";
 
 const CheckIn = () => {
   const [ticketId, setTicketId] = useState("");
@@ -63,4 +64,4 @@ const CheckIn = () => {
   );
 };
 
-export default CheckIn;
+export default withAuth(CheckIn);

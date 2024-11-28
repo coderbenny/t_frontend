@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import withAuth from "@/components/WithAuth";
 
 const UsersWithTickets = () => {
   const [users, setUsers] = useState([]);
@@ -109,4 +110,4 @@ const UsersWithTickets = () => {
   );
 };
 
-export default UsersWithTickets;
+export default withAuth(UsersWithTickets);

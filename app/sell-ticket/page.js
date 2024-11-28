@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import withAuth from "@/components/WithAuth";
 
 const SellTicket = () => {
   const [userId, setUserId] = useState("");
@@ -195,4 +196,4 @@ const SellTicket = () => {
   );
 };
 
-export default SellTicket;
+export default withAuth(SellTicket);

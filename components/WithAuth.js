@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/authSlice";
 
 const withAuth = (WrappedComponent) => {
   const EnhancedComponent = (props) => {

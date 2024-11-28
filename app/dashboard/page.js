@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import withAuth from "@/components/WithAuth";
 
 const Dashboard = () => {
   const [events, setEvents] = useState([]);
@@ -221,4 +222,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard);
