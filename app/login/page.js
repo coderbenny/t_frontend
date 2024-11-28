@@ -1,9 +1,13 @@
-// pages/login.js
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { loginSuccess } from "@/redux/auth/authSlice";
 
 const LoginPage = () => {
+  const router = useRouter();
+  const dispatch = useDispatch(); // Get dispatch function from redux
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,8 +27,13 @@ const LoginPage = () => {
         setError("An error occurred during login.");
       } else {
         const data = await res.json();
-        localStorage.setItem("access_token", JSON.stringify(data.access_token));
+
+        // Dispatch loginSuccess to store token and user data in Redux state
+        dispatch(loginSuccess({ user: data.user, token: data.access_token }));
+        sessionStorage.setItem("access_token", data.access_token);
+
         alert("Login successful");
+        router.push("/dashboard");
       }
     } catch (error) {
       setError("An error occurred. Please try again.");

@@ -19,7 +19,7 @@ const CreateEvent = () => {
       description,
       capacity,
       price,
-      image_link: imageLink,
+      image: imageLink,
     };
 
     try {

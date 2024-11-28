@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Define initial state
 const initialState = {
-  user: null,
-  token: null,
-  loading: false,
-  error: null,
-  isAuthenticated: false, // Add a flag to track authentication status
+  user: null, // Holds the user details like email, name, id, phone, etc.
+  token: null, // Stores the access token
+  loading: false, // Tracks the loading state of async actions
+  error: null, // Holds any error messages
+  isAuthenticated: false, // Tracks whether the user is authenticated
 };
 
 // Async action to check the authentication status
@@ -14,17 +14,17 @@ export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, thunkAPI) => {
     try {
-      const token = sessionStorage.getItem("access_token"); // Get token from sessionStorage
+      const token = sessionStorage.getItem("access_token");
 
       if (!token) {
         throw new Error("No token found");
       }
 
-      // API call to verify the token (you can replace this URL with your actual endpoint)
+      // API call to verify the token and fetch user details
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/verify-token`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/whoami`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -38,14 +38,15 @@ export const checkAuth = createAsyncThunk(
         throw new Error(data.error || "Token verification failed");
       }
 
-      // Return user data if token is valid
-      return { user: data.user, token };
+      // Return user data and token if successful
+      return { user: data, token };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
+// Define the auth slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -54,24 +55,25 @@ const authSlice = createSlice({
       const { user, token } = payload;
       state.user = user;
       state.token = token;
-      state.isAuthenticated = true; // Set user as authenticated
+      state.isAuthenticated = true;
     },
     signupSuccess: (state, { payload }) => {
-      state.user = payload.user; // Only set the user, token stays null
-      state.isAuthenticated = false; // Not authenticated immediately after signup
+      state.user = payload.user;
+      state.token = null;
+      state.isAuthenticated = false;
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
-      state.isAuthenticated = false; // Reset authentication status
-      sessionStorage.removeItem("access_token"); // Optionally remove token from sessionStorage
+      state.isAuthenticated = false;
+      sessionStorage.removeItem("access_token");
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(checkAuth.pending, (state) => {
         state.loading = true;
-        state.error = null; // Reset any previous errors
+        state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, { payload }) => {
         state.user = payload.user;
@@ -84,7 +86,7 @@ const authSlice = createSlice({
         state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
-        state.error = payload; // Store the error message
+        state.error = payload;
       });
   },
 });
