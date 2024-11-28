@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/authSlice";
 
 const withAuth = (WrappedComponent) => {
-  return (props) => {
+  const EnhancedComponent = (props) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((state) => state.auth);
@@ -16,7 +16,7 @@ const withAuth = (WrappedComponent) => {
       }
     }, [isAuthenticated, router]);
 
-    // If not authenticated, return null (or loading state)
+    // Show a loading spinner while redirecting
     if (!isAuthenticated) {
       return (
         <div className="flex items-center justify-center h-64">
@@ -25,9 +25,16 @@ const withAuth = (WrappedComponent) => {
       );
     }
 
-    // If authenticated, return the wrapped component
+    // Render the wrapped component if authenticated
     return <WrappedComponent {...props} />;
   };
+
+  // Set the display name for debugging purposes
+  EnhancedComponent.displayName = `withAuth(${
+    WrappedComponent.displayName || WrappedComponent.name || "Component"
+  })`;
+
+  return EnhancedComponent;
 };
 
 export default withAuth;
