@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import withAuth from "@/components/WithAuth";
 
 const SellTicket = () => {
   const [userId, setUserId] = useState("");
@@ -80,14 +81,6 @@ const SellTicket = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <span className="loading loading-ring loading-lg"></span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        {error}
       </div>
     );
   }
@@ -203,4 +196,4 @@ const SellTicket = () => {
   );
 };
 
-export default SellTicket;
+export default withAuth(SellTicket);

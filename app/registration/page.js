@@ -1,8 +1,9 @@
-// pages/register.js
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+// Input field component
 const InputField = ({ id, label, type, value, onChange }) => (
   <div className="mb-4">
     <label htmlFor={id} className="block text-gray-700 mb-2 font-semibold">
@@ -11,15 +12,17 @@ const InputField = ({ id, label, type, value, onChange }) => (
     <input
       type={type}
       id={id}
+      name={id}
       value={value}
       onChange={onChange}
-      className="input input-bordered w-full text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
+      className="input input-bordered w-full text-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-400"
       required
     />
   </div>
 );
 
 const RegisterPage = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,17 +32,31 @@ const RegisterPage = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  // Handle change for input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  // Basic validation for email and phone
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const validatePhone = (phone) => /^\d{10}$/.test(phone); // 10-digit phone number
+
+  // Handle form submission
   const handleRegister = async (e) => {
     e.preventDefault();
 
     // Basic validation
     if (Object.values(formData).some((field) => !field)) {
       setError("All fields are required.");
+      return;
+    }
+    if (!validateEmail(formData.email)) {
+      setError("Please enter a valid email.");
+      return;
+    }
+    if (!validatePhone(formData.phone)) {
+      setError("Please enter a valid phone number (10 digits).");
       return;
     }
 
@@ -59,8 +76,13 @@ const RegisterPage = () => {
         setSuccessMessage("User registered successfully!");
         setError("");
         setFormData({ name: "", email: "", phone: "", password: "" }); // Reset form data
+
+        // Redirect to login page after 2 seconds
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
       } else {
-        const { message } = await response.json(); // Assuming server returns a message
+        const { message } = await response.json();
         setError(message || "Registration was not successful!");
       }
     } catch (error) {
@@ -79,7 +101,7 @@ const RegisterPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-orange-100 to-orange-200 p-4">
       <form
-        className="w-full max-w-md mt-20 bg-white p-8 rounded-lg shadow-lg"
+        className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg"
         onSubmit={handleRegister}
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-orange-600 tracking-wider">
