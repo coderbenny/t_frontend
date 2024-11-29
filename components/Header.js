@@ -9,19 +9,23 @@ const Header = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth); // Extract authentication status
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // For mobile menu toggle
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const handleLinkClick = () => setIsOpen(false);
 
-  // Logout handler
   const handleLogout = () => {
-    dispatch(logout()); // Dispatch the logout action
-    setIsOpen(false); // Close the menu if on mobile
-    router.push("/"); // Navigate to home page
+    dispatch(logout()); // Dispatch logout action
+    setIsOpen(false); // Close mobile menu
+    router.push("/"); // Redirect to home page
   };
 
-  // Menu items to display
+  const handleLogin = () => {
+    setIsOpen(false); // Close mobile menu
+    router.push("/login"); // Navigate to admin login page
+  };
+
+  // Menu items for authenticated users
   const menuItems = isAuthenticated
     ? [
         { route: "/dashboard", name: "Dashboard" },
@@ -29,7 +33,7 @@ const Header = () => {
         { route: "/sell-ticket", name: "Sell Ticket" },
         { route: "/clients", name: "Clients" },
       ]
-    : []; // No menu items if not authenticated
+    : []; // No menu items for unauthenticated users
 
   return (
     <header className="shadow-md fixed w-full z-50 bg-orange-50">
@@ -41,10 +45,10 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Desktop Menu */}
-        {isAuthenticated && (
-          <div className="hidden md:flex space-x-4 items-center">
-            {menuItems.map((item, index) => (
+        {/* Menu for Desktop */}
+        <div className="hidden md:flex space-x-4 items-center">
+          {isAuthenticated &&
+            menuItems.map((item, index) => (
               <Link key={index} href={item.route}>
                 <button
                   className="btn btn-ghost hover:bg-orange-200 rounded-md text-gray-700 transition ease-in-out duration-150"
@@ -54,59 +58,57 @@ const Header = () => {
                 </button>
               </Link>
             ))}
-            <button
-              onClick={handleLogout}
-              className="btn btn-ghost bg-orange-500 text-white hover:bg-orange-600 rounded-md px-4 py-2 transition ease-in-out duration-150"
-            >
-              Logout
-            </button>
-          </div>
-        )}
+          <button
+            onClick={isAuthenticated ? handleLogout : handleLogin}
+            className="btn btn-ghost bg-orange-500 text-white hover:bg-orange-600 rounded-md px-4 py-2 transition ease-in-out duration-150"
+          >
+            {isAuthenticated ? "Logout" : "Admin Login"}
+          </button>
+        </div>
 
-        {/* Mobile Menu Toggle (Only for authenticated users) */}
-        {isAuthenticated && (
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="btn btn-ghost hover:bg-orange-200 p-2 rounded-md text-orange-600 transition ease-in-out duration-200"
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden">
+          <button
+            onClick={toggleMenu}
+            className="btn btn-ghost hover:bg-orange-200 p-2 rounded-md text-orange-600 transition ease-in-out duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
-            </button>
-          </div>
-        )}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
+        </div>
       </nav>
 
-      {/* Mobile Menu (Only for authenticated users) */}
-      {isOpen && isAuthenticated && (
+      {/* Mobile Menu */}
+      {isOpen && (
         <div className="absolute top-16 left-0 w-full bg-white shadow-lg p-4 md:hidden">
-          {menuItems.map((item, index) => (
-            <Link key={index} href={item.route}>
-              <button
-                className="btn btn-ghost block w-full text-left text-gray-700 hover:bg-orange-100 hover:text-orange-600 rounded-md py-2 transition ease-in-out duration-150"
-                onClick={handleLinkClick}
-              >
-                {item.name}
-              </button>
-            </Link>
-          ))}
+          {isAuthenticated &&
+            menuItems.map((item, index) => (
+              <Link key={index} href={item.route}>
+                <button
+                  className="btn btn-ghost block w-full text-left text-gray-700 hover:bg-orange-100 hover:text-orange-600 rounded-md py-2 transition ease-in-out duration-150"
+                  onClick={handleLinkClick}
+                >
+                  {item.name}
+                </button>
+              </Link>
+            ))}
           <button
-            onClick={handleLogout}
+            onClick={isAuthenticated ? handleLogout : handleLogin}
             className="btn btn-ghost w-full text-left bg-orange-500 text-white hover:bg-orange-600 rounded-md py-2 mt-2 transition ease-in-out duration-150"
           >
-            Logout
+            {isAuthenticated ? "Logout" : "Admin Login"}
           </button>
         </div>
       )}
