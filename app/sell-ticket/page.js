@@ -16,9 +16,7 @@ const SellTicket = () => {
   // Fetch function with loading and error handling
   const fetchData = async (endpoint, setData) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/${endpoint}`
-      );
+      const res = await fetch(`ticko/${endpoint}`);
       if (!res.ok) throw new Error(`Failed to fetch ${endpoint}`);
       const data = await res.json();
       setData(data);
@@ -48,7 +46,7 @@ const SellTicket = () => {
         : { userId, eventId, discountCode };
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sell`, {
+      const res = await fetch("/ticko/sell", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

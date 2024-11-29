@@ -24,7 +24,7 @@ const CreateEvent = () => {
     };
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events`, {
+      const res = await fetch('/ticko/events', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

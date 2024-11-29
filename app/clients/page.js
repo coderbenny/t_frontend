@@ -10,9 +10,7 @@ const UsersWithTickets = () => {
   // Fetch users with tickets
   const fetchUsersWithTickets = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users_with_tickets`
-      );
+      const response = await fetch("/ticko/users_with_tickets");
       if (!response.ok) throw new Error("Failed to fetch users with tickets.");
       const data = await response.json();
       setUsers(data);

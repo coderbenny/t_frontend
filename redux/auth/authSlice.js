@@ -21,16 +21,13 @@ export const checkAuth = createAsyncThunk(
       }
 
       // API call to verify the token and fetch user details
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/whoami`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch("/ticko/whoami", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await response.json();
 

@@ -16,9 +16,7 @@ const EventsPage = () => {
       setLoading(true);
       setError(null); // Reset error state before fetching
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/events`
-        );
+        const res = await fetch("/ticko/events");
         if (!res.ok) {
           throw new Error(`Failed to fetch events: ${res.statusText}`);
         }
