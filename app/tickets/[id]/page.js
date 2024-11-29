@@ -24,7 +24,7 @@ const TicketPurchasePage = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}`
+          `/ticko/events/${eventId}`
         );
 
         if (!res.ok) throw new Error("Failed to fetch event details.");

@@ -12,9 +12,7 @@ const Dashboard = () => {
 
   const fetchData = async (endpoint, setData) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/${endpoint}`
-      );
+      const res = await fetch(`/ticko/${endpoint}`);
       if (res.status === 404) {
         setData([]);
         return;
@@ -41,15 +39,12 @@ const Dashboard = () => {
 
   async function handleCloseEvent(eventId) {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await fetch(`ticko/events/${eventId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (res.ok) {
         setEvents((prev) =>
           prev.map((event) =>

@@ -15,7 +15,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
+      const res = await fetch("/ticko/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -14,7 +14,7 @@ const HomePage = () => {
 
     // If the user is logged in, fetch the stats from the backend
     if (isLoggedIn) {
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/stats`)
+      fetch("/ticko/stats")
         .then((response) => response.json())
         .then((data) => {
           setStats(data); // Store the stats in the state

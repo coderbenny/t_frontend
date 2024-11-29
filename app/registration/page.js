@@ -61,16 +61,13 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin-registration`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("/ticko/admin-registration", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
 
       if (response.ok) {
         setSuccessMessage("User registered successfully!");
