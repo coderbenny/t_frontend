@@ -99,6 +99,7 @@ const Dashboard = () => {
                 <th className="p-4 font-bold">Capacity</th>
                 <th className="p-4 font-bold">Actions</th>
                 <th className="p-4 font-bold">Status</th>
+                <th className="p-4 font-bold">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -146,6 +147,7 @@ const Dashboard = () => {
                         {event.closed ? "Closed" : "Active"}
                       </p>
                     </td>
+                    <td
                   </tr>
                 ))
               )}
