@@ -21,14 +21,10 @@ const TicketPurchasePage = () => {
     if (!eventId) return;
 
     const fetchEventDetails = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const res = await fetch(
-          `/ticko/events/${eventId}`
-        );
-
+        const res = await fetch(`/ticko/events/${eventId}`);
         if (!res.ok) throw new Error("Failed to fetch event details.");
-
         const data = await res.json();
         setEventDetails(data);
       } catch (err) {
@@ -61,11 +57,15 @@ const TicketPurchasePage = () => {
         }
       );
 
-      if (!response.ok) throw new Error("Failed to complete purchase.");
-
-      setPurchaseSuccess(true);
+      if (response.status === 200) {
+        // Explicitly check for success
+        setPurchaseSuccess(true);
+      } else {
+        const resData = await response.json();
+        throw new Error(resData.message || "Failed to complete purchase.");
+      }
     } catch (err) {
-      setError(err.message || "Failed to complete purchase.");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -106,19 +106,14 @@ const TicketPurchasePage = () => {
     );
   }
 
-  const isEventClosed = eventDetails?.closed;
-  const eventCapacity = eventDetails?.capacity;
-
   return (
     <div className="min-h-screen py-20 bg-gray-900 text-white">
       <div className="container mx-auto p-6">
-        {/* Back to Events Link */}
         <div className="mb-6">
           <Link href="/" className="btn btn-outline border-orange-400">
             &larr; Back to Events
           </Link>
         </div>
-
         {eventDetails && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <img
@@ -147,72 +142,70 @@ const TicketPurchasePage = () => {
               </p>
               <p
                 className={`text-lg font-bold ${
-                  isEventClosed ? "text-red-500" : "text-green-500"
+                  eventDetails.closed ? "text-red-500" : "text-green-500"
                 }`}
               >
-                {isEventClosed ? "This event is closed." : "Open for booking!"}
+                {eventDetails.closed
+                  ? "This event is closed."
+                  : "Open for booking!"}
               </p>
             </div>
           </div>
         )}
-
-        {!isEventClosed && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-semibold mb-6">Purchase Ticket</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="form-control w-full">
-                <label htmlFor="name" className="label">
-                  <span className="label-text text-white">Name</span>
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="input input-bordered w-full bg-gray-700 text-white"
-                  required
-                />
-              </div>
-              <div className="form-control w-full">
-                <label htmlFor="email" className="label">
-                  <span className="label-text text-white">Email</span>
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="input input-bordered w-full bg-gray-700 text-white"
-                  required
-                />
-              </div>
-              <div className="form-control w-full">
-                <label htmlFor="phone" className="label">
-                  <span className="label-text text-white">Phone</span>
-                </label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="input input-bordered w-full bg-gray-700 text-white"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className={`btn bg-orange-600 hover:bg-orange-500 text-white w-full ${
-                  loading ? "loading" : ""
-                }`}
-                disabled={loading}
-              >
-                {loading ? "Processing..." : "Complete Purchase"}
-              </button>
-            </form>
-          </div>
+        {!eventDetails?.closed && (
+          <form onSubmit={handleSubmit} className="space-y-6 mt-12">
+            <div className="form-control w-full">
+              <label htmlFor="name" className="label text-white">
+                Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="input input-bordered bg-gray-700 text-white w-full"
+                required
+              />
+            </div>
+            <div className="form-control w-full">
+              <label htmlFor="email" className="label text-white">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="input input-bordered bg-gray-700 text-white w-full"
+                required
+              />
+            </div>
+            <div className="form-control w-full">
+              <label htmlFor="phone" className="label text-white">
+                Phone
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className="input input-bordered bg-gray-700 text-white w-full"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className={`btn bg-orange-600 hover:bg-orange-500 text-white w-full ${
+                loading ? "loading" : ""
+              }`}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Complete Purchase"}
+            </button>
+          </form>
         )}
       </div>
     </div>
