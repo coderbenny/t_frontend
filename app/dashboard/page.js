@@ -147,7 +147,6 @@ const Dashboard = () => {
                         {event.closed ? "Closed" : "Active"}
                       </p>
                     </td>
-                    <td
                   </tr>
                 ))
               )}
