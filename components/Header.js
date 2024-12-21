@@ -27,8 +27,7 @@ const Header = () => {
 
   // Menu items for authenticated users
   const menuItems = isAuthenticated
-    ? [
-        { route: "/dashboard", name: "Dashboard" },
+    ? [        { route: "/dashboard", name: "Dashboard" },
         { route: "/create-event", name: "Create Event" },
         { route: "/sell-ticket", name: "Sell Ticket" },
         { route: "/clients", name: "Clients" },

@@ -90,7 +90,7 @@ const EventsPage = () => {
                 >
                   <figure>
                     <img
-                      src={event.image || "/placeholder.png"}
+                      src="/dj.jpg"
                       alt={event.title}
                       className="rounded-t-lg w-full h-48 object-cover"
                     />
