@@ -45,7 +45,7 @@ To set up the project locally:
 
    ```bash
    git clone https://github.com/coderbenny/t_frontend.git
-   cd event-management-system
+   cd t_frontend
    ```
 
 2. Install dependencies:
