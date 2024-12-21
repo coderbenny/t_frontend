@@ -20,6 +20,9 @@ This repository is an Event Management System built with Next.js, featuring mult
 
 The Event Management System enables users to manage events by creating events, adding users, selling tickets, and performing ticket check-ins. Each component of the application is tailored for specific actions within the event management flow and provides real-time feedback for better user interaction.
 
+![Website Preview](/tnew.jpg)
+
+
 ## Features
 
 - **Add User**: Adds a new user with fields for username, email, and phone number.
