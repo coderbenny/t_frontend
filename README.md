@@ -59,7 +59,14 @@ To set up the project locally:
    ```javascript
    /** @type {import('next').NextConfig} */
    const nextConfig = {
-     reactStrictMode: true,
+     async rewrites(){
+      return [
+         {
+          source:"/ticko/:path*",
+          destination: "backend_api_url",
+         },
+      ];
+     },
    };
 
    export default nextConfig;
